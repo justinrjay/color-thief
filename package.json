@@ -43,5 +43,8 @@
   "scripts": {
     "lint": "grunt test",
     "build": "grunt build"
-  }
+  },
+  "files": [
+    "dist/"
+  ]
 }
