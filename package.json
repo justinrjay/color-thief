@@ -1,5 +1,5 @@
 {
-  "name": "color-thief",
+  "name": "@mariotacke/color-thief",
   "version": "2.0.2",
   "author": {
     "name": "Lokesh Dhakar",
@@ -19,15 +19,15 @@
   "homepage": "http://lokeshdhakar.com/projects/color-thief/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lokesh/color-thief.git"
+    "url": "https://github.com/mariotacke/color-thief.git"
   },
   "bugs": {
-    "url": "https://github.com/lokesh/color-thief/issues"
+    "url": "https://github.com/mariotacke/color-thief/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://raw.githubusercontent.com/lokesh/color-thief/master/LICENSE/"
+      "url": "https://raw.githubusercontent.com/mariotacke/color-thief/master/LICENSE/"
     }
   ],
   "main": "dist/color-thief.min.js",
@@ -39,5 +39,9 @@
     "grunt-contrib-jshint": "~1.0.0",
     "grunt-jscs": "^1.8.0",
     "grunt-contrib-jshint": "^0.11.2"
+  },
+  "scripts": {
+    "lint": "grunt test",
+    "build": "grunt build"
   }
 }
