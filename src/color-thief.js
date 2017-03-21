@@ -130,7 +130,7 @@ ColorThief.prototype.getPalette = function(sourceImage, colorCount, quality) {
     // Send array to quantize function which clusters values
     // using median cut algorithm
     var cmap    = MMCQ.quantize(pixelArray, colorCount);
-    var palette = cmap? cmap.palette() : null;
+    var palette = cmap ? cmap.palette() : null;
 
     // Clean up
     image.removeCanvas();
@@ -141,45 +141,45 @@ ColorThief.prototype.getPalette = function(sourceImage, colorCount, quality) {
 ColorThief.prototype.getColorFromUrl = function(imageUrl, callback, quality) {
     sourceImage = document.createElement("img");
     var thief = this;
-    sourceImage.addEventListener('load' , function(){
+    sourceImage.addEventListener('load' , function() {
         var palette = thief.getPalette(sourceImage, 5, quality);
         var dominantColor = palette[0];
         callback(dominantColor, imageUrl);
     });
-    sourceImage.src = imageUrl
+    sourceImage.src = imageUrl;
 };
 
 
 ColorThief.prototype.getImageData = function(imageUrl, callback) {
     xhr = new XMLHttpRequest();
     xhr.open('GET', imageUrl, true);
-    xhr.responseType = 'arraybuffer'
+    xhr.responseType = 'arraybuffer';
     xhr.onload = function(e) {
         if (this.status == 200) {
-            uInt8Array = new Uint8Array(this.response)
-            i = uInt8Array.length
+            uInt8Array = new Uint8Array(this.response);
+            i = uInt8Array.length;
             binaryString = new Array(i);
-            for (var i = 0; i < uInt8Array.length; i++){
-                binaryString[i] = String.fromCharCode(uInt8Array[i])
+            for (var i = 0; i < uInt8Array.length; i++) {
+                binaryString[i] = String.fromCharCode(uInt8Array[i]);
             }
-            data = binaryString.join('')
-            base64 = window.btoa(data)
-            callback ("data:image/png;base64,"+base64)
+            data = binaryString.join('');
+            base64 = window.btoa(data);
+            callback ("data:image/png;base64," + base64);
         }
-    }
+    };
     xhr.send();
 };
 
 ColorThief.prototype.getColorAsync = function(imageUrl, callback, quality) {
     var thief = this;
-    this.getImageData(imageUrl, function(imageData){
+    this.getImageData(imageUrl, function(imageData) {
         sourceImage = document.createElement("img");
-        sourceImage.addEventListener('load' , function(){
+        sourceImage.addEventListener('load' , function() {
             var palette = thief.getPalette(sourceImage, 5, quality);
             var dominantColor = palette[0];
             callback(dominantColor, this);
         });
-        sourceImage.src = imageData;      
+        sourceImage.src = imageData;
     });
 };
 
@@ -201,15 +201,23 @@ ColorThief.prototype.getColorAsync = function(imageUrl, callback, quality) {
 if (!pv) {
     var pv = {
         map: function(array, f) {
-          var o = {};
-          return f ? array.map(function(d, i) { o.index = i; return f.call(o, d); }) : array.slice();
+            var o = {};
+            return f ? array.map(function(d, i) {
+                o.index = i;
+                return f.call(o, d);
+            }) : array.slice();
         },
         naturalOrder: function(a, b) {
             return (a < b) ? -1 : ((a > b) ? 1 : 0);
         },
         sum: function(array, f) {
-          var o = {};
-          return array.reduce(f ? function(p, d, i) { o.index = i; return p + f.call(o, d); } : function(p, d) { return p + d; }, 0);
+            var o = {};
+            return array.reduce(f ? function(p, d, i) {
+                o.index = i;
+                return p + f.call(o, d);
+            } : function(p, d) {
+                return p + d;
+            }, 0);
         },
         max: function(array, f) {
           return Math.max.apply(null, f ? pv.map(array, f) : array);
@@ -243,10 +251,10 @@ var newPixels = myPixels.map(function(p) {
  */
 var MMCQ = (function() {
     // private constants
-    var sigbits = 5,
-        rshift = 8 - sigbits,
-        maxIterations = 1000,
-        fractByPopulations = 0.75;
+    var sigbits = 5;
+    var rshift = 8 - sigbits;
+    var maxIterations = 1000;
+    var fractByPopulations = 0.75;
 
     // get reduced-space color index for a pixel
     function getColorIndex(r, g, b) {
@@ -255,8 +263,8 @@ var MMCQ = (function() {
 
     // Simple priority queue
     function PQueue(comparator) {
-        var contents = [],
-            sorted = false;
+        var contents = [];
+        var sorted = false;
 
         function sort() {
             contents.sort(comparator);
@@ -270,7 +278,7 @@ var MMCQ = (function() {
             },
             peek: function(index) {
                 if (!sorted) sort();
-                if (index===undefined) index = contents.length - 1;
+                if (index === undefined) index = contents.length - 1;
                 return contents[index];
             },
             pop: function() {
@@ -310,15 +318,18 @@ var MMCQ = (function() {
             return vbox._volume;
         },
         count: function(force) {
-            var vbox = this,
-                histo = vbox.histo;
+            var vbox = this;
+            var histo = vbox.histo;
             if (!vbox._count_set || force) {
-                var npix = 0,
-                    index, i, j, k;
+                var npix = 0;
+                var index;
+                var i;
+                var j;
+                var k;
                 for (i = vbox.r1; i <= vbox.r2; i++) {
                     for (j = vbox.g1; j <= vbox.g2; j++) {
                         for (k = vbox.b1; k <= vbox.b2; k++) {
-                             index = getColorIndex(i,j,k);
+                             index = getColorIndex(i, j, k);
                              npix += (histo[index] || 0);
                         }
                     }
@@ -333,20 +344,23 @@ var MMCQ = (function() {
             return new VBox(vbox.r1, vbox.r2, vbox.g1, vbox.g2, vbox.b1, vbox.b2, vbox.histo);
         },
         avg: function(force) {
-            var vbox = this,
-                histo = vbox.histo;
+            var vbox = this;
+            var histo = vbox.histo;
             if (!vbox._avg || force) {
-                var ntot = 0,
-                    mult = 1 << (8 - sigbits),
-                    rsum = 0,
-                    gsum = 0,
-                    bsum = 0,
-                    hval,
-                    i, j, k, histoindex;
+                var ntot = 0;
+                var mult = 1 << (8 - sigbits);
+                var rsum = 0;
+                var gsum = 0;
+                var bsum = 0;
+                var hval;
+                var i;
+                var j;
+                var k;
+                var histoindex;
                 for (i = vbox.r1; i <= vbox.r2; i++) {
                     for (j = vbox.g1; j <= vbox.g2; j++) {
                         for (k = vbox.b1; k <= vbox.b2; k++) {
-                             histoindex = getColorIndex(i,j,k);
+                             histoindex = getColorIndex(i, j, k);
                              hval = histo[histoindex] || 0;
                              ntot += hval;
                              rsum += (hval * (i + 0.5) * mult);
@@ -356,9 +370,8 @@ var MMCQ = (function() {
                     }
                 }
                 if (ntot) {
-                    vbox._avg = [~~(rsum/ntot), ~~(gsum/ntot), ~~(bsum/ntot)];
+                    vbox._avg = [~~(rsum / ntot), ~~(gsum / ntot), ~~(bsum / ntot)];
                 } else {
-//                    console.log('empty box');
                     vbox._avg = [
                         ~~(mult * (vbox.r1 + vbox.r2 + 1) / 2),
                         ~~(mult * (vbox.g1 + vbox.g2 + 1) / 2),
@@ -369,10 +382,10 @@ var MMCQ = (function() {
             return vbox._avg;
         },
         contains: function(pixel) {
-            var vbox = this,
-                rval = pixel[0] >> rshift;
-                gval = pixel[1] >> rshift;
-                bval = pixel[2] >> rshift;
+            var vbox = this;
+            var rval = pixel[0] >> rshift;
+            var gval = pixel[1] >> rshift;
+            var bval = pixel[2] >> rshift;
             return (rval >= vbox.r1 && rval <= vbox.r2 &&
                     gval >= vbox.g1 && gval <= vbox.g2 &&
                     bval >= vbox.b1 && bval <= vbox.b2);
@@ -381,10 +394,10 @@ var MMCQ = (function() {
 
     // Color map
     function CMap() {
-        this.vboxes = new PQueue(function(a,b) {
+        this.vboxes = new PQueue(function(a, b) {
             return pv.naturalOrder(
-                a.vbox.count()*a.vbox.volume(),
-                b.vbox.count()*b.vbox.volume()
+                a.vbox.count() * a.vbox.volume(),
+                b.vbox.count() * b.vbox.volume()
             );
         });
     }
@@ -396,14 +409,16 @@ var MMCQ = (function() {
             });
         },
         palette: function() {
-            return this.vboxes.map(function(vb) { return vb.color; });
+            return this.vboxes.map(function(vb) {
+                return vb.color;
+            });
         },
         size: function() {
             return this.vboxes.size();
         },
         map: function(color) {
             var vboxes = this.vboxes;
-            for (var i=0; i<vboxes.size(); i++) {
+            for (var i = 0; i<vboxes.size(); i++) {
                 if (vboxes.peek(i).vbox.contains(color)) {
                     return vboxes.peek(i).color;
                 }
@@ -411,9 +426,11 @@ var MMCQ = (function() {
             return this.nearest(color);
         },
         nearest: function(color) {
-            var vboxes = this.vboxes,
-                d1, d2, pColor;
-            for (var i=0; i<vboxes.size(); i++) {
+            var vboxes = this.vboxes;
+            var d1;
+            var d2;
+            var pColor;
+            for (var i = 0; i<vboxes.size(); i++) {
                 d2 = Math.sqrt(
                     Math.pow(color[0] - vboxes.peek(i).color[0], 2) +
                     Math.pow(color[1] - vboxes.peek(i).color[1], 2) +
@@ -429,27 +446,32 @@ var MMCQ = (function() {
         forcebw: function() {
             // XXX: won't  work yet
             var vboxes = this.vboxes;
-            vboxes.sort(function(a,b) { return pv.naturalOrder(pv.sum(a.color), pv.sum(b.color));});
+            vboxes.sort(function(a, b) {
+                return pv.naturalOrder(pv.sum(a.color), pv.sum(b.color));
+            });
 
             // force darkest color to black if everything < 5
             var lowest = vboxes[0].color;
             if (lowest[0] < 5 && lowest[1] < 5 && lowest[2] < 5)
-                vboxes[0].color = [0,0,0];
+                vboxes[0].color = [0, 0, 0];
 
             // force lightest color to white if everything > 251
-            var idx = vboxes.length-1,
-                highest = vboxes[idx].color;
+            var idx = vboxes.length - 1;
+            var highest = vboxes[idx].color;
             if (highest[0] > 251 && highest[1] > 251 && highest[2] > 251)
-                vboxes[idx].color = [255,255,255];
+                vboxes[idx].color = [255, 255, 255];
         }
     };
 
     // histo (1-d array, giving the number of pixels in
     // each quantized region of color space), or null on error
     function getHisto(pixels) {
-        var histosize = 1 << (3 * sigbits),
-            histo = new Array(histosize),
-            index, rval, gval, bval;
+        var histosize = 1 << (3 * sigbits);
+        var histo = new Array(histosize);
+        var index;
+        var rval;
+        var gval;
+        var bval;
         pixels.forEach(function(pixel) {
             rval = pixel[0] >> rshift;
             gval = pixel[1] >> rshift;
@@ -461,10 +483,15 @@ var MMCQ = (function() {
     }
 
     function vboxFromPixels(pixels, histo) {
-        var rmin=1000000, rmax=0,
-            gmin=1000000, gmax=0,
-            bmin=1000000, bmax=0,
-            rval, gval, bval;
+        var rmin = 1000000;
+        var rmax = 0;
+        var gmin = 1000000;
+        var gmax = 0;
+        var bmin = 1000000;
+        var bmax = 0;
+        var rval;
+        var gval;
+        var bval;
         // find min/max
         pixels.forEach(function(pixel) {
             rval = pixel[0] >> rshift;
@@ -483,25 +510,29 @@ var MMCQ = (function() {
     function medianCutApply(histo, vbox) {
         if (!vbox.count()) return;
 
-        var rw = vbox.r2 - vbox.r1 + 1,
-            gw = vbox.g2 - vbox.g1 + 1,
-            bw = vbox.b2 - vbox.b1 + 1,
-            maxw = pv.max([rw, gw, bw]);
+        var rw = vbox.r2 - vbox.r1 + 1;
+        var gw = vbox.g2 - vbox.g1 + 1;
+        var bw = vbox.b2 - vbox.b1 + 1;
+        var maxw = pv.max([rw, gw, bw]);
         // only one pixel, no split
         if (vbox.count() == 1) {
             return [vbox.copy()];
         }
         /* Find the partial sum arrays along the selected axis. */
-        var total = 0,
-            partialsum = [],
-            lookaheadsum = [],
-            i, j, k, sum, index;
+        var total = 0;
+        var partialsum = [];
+        var lookaheadsum = [];
+        var i;
+        var j;
+        var k;
+        var sum;
+        var index;
         if (maxw == rw) {
             for (i = vbox.r1; i <= vbox.r2; i++) {
                 sum = 0;
                 for (j = vbox.g1; j <= vbox.g2; j++) {
                     for (k = vbox.b1; k <= vbox.b2; k++) {
-                        index = getColorIndex(i,j,k);
+                        index = getColorIndex(i, j, k);
                         sum += (histo[index] || 0);
                     }
                 }
@@ -514,7 +545,7 @@ var MMCQ = (function() {
                 sum = 0;
                 for (j = vbox.r1; j <= vbox.r2; j++) {
                     for (k = vbox.b1; k <= vbox.b2; k++) {
-                        index = getColorIndex(j,i,k);
+                        index = getColorIndex(j, i, k);
                         sum += (histo[index] || 0);
                     }
                 }
@@ -527,7 +558,7 @@ var MMCQ = (function() {
                 sum = 0;
                 for (j = vbox.r1; j <= vbox.r2; j++) {
                     for (k = vbox.g1; k <= vbox.g2; k++) {
-                        index = getColorIndex(j,k,i);
+                        index = getColorIndex(j, k, i);
                         sum += (histo[index] || 0);
                     }
                 }
@@ -535,13 +566,18 @@ var MMCQ = (function() {
                 partialsum[i] = total;
             }
         }
-        partialsum.forEach(function(d,i) {
-            lookaheadsum[i] = total-d;
+        partialsum.forEach(function(d, i) {
+            lookaheadsum[i] = total - d;
         });
         function doCut(color) {
-            var dim1 = color + '1',
-                dim2 = color + '2',
-                left, right, vbox1, vbox2, d2, count2=0;
+            var dim1 = color + '1';
+            var dim2 = color + '2';
+            var left;
+            var right;
+            var vbox1;
+            var vbox2;
+            var d2;
+            var count2 = 0;
             for (i = vbox[dim1]; i <= vbox[dim2]; i++) {
                 if (partialsum[i] > total / 2) {
                     vbox1 = vbox.copy();
@@ -554,7 +590,7 @@ var MMCQ = (function() {
                     // avoid 0-count boxes
                     while (!partialsum[d2]) d2++;
                     count2 = lookaheadsum[d2];
-                    while (!count2 && partialsum[d2-1]) count2 = lookaheadsum[--d2];
+                    while (!count2 && partialsum[d2 - 1]) count2 = lookaheadsum[--d2];
                     // set dimensions
                     vbox1[dim2] = d2;
                     vbox2[dim1] = vbox1[dim2] + 1;
@@ -579,26 +615,30 @@ var MMCQ = (function() {
 
         // XXX: check color content and convert to grayscale if insufficient
 
-        var histo = getHisto(pixels),
-            histosize = 1 << (3 * sigbits);
+        var histo = getHisto(pixels);
+        var histosize = 1 << (3 * sigbits);
 
         // check that we aren't below maxcolors already
         var nColors = 0;
-        histo.forEach(function() { nColors++; });
-        if (nColors <= maxcolors) {
-            // XXX: generate the new colors from the histo and return
-        }
+        histo.forEach(function() {
+            nColors++;
+        });
+        // if (nColors <= maxcolors) {
+        // XXX: generate the new colors from the histo and return
+        // }
 
         // get the beginning vbox from the colors
-        var vbox = vboxFromPixels(pixels, histo),
-            pq = new PQueue(function(a,b) { return pv.naturalOrder(a.count(), b.count()); });
+        var vbox = vboxFromPixels(pixels, histo);
+        var pq = new PQueue(function(a, b) {
+            return pv.naturalOrder(a.count(), b.count());
+        });
         pq.push(vbox);
 
         // inner function to do the iteration
         function iter(lh, target) {
-            var ncolors = 1,
-                niters = 0,
-                vbox;
+            var ncolors = 1;
+            var niters = 0;
+            var vbox;
             while (niters < maxIterations) {
                 vbox = lh.pop();
                 if (!vbox.count())  { /* just put it back */
@@ -607,9 +647,9 @@ var MMCQ = (function() {
                     continue;
                 }
                 // do the cut
-                var vboxes = medianCutApply(histo, vbox),
-                    vbox1 = vboxes[0],
-                    vbox2 = vboxes[1];
+                var vboxes = medianCutApply(histo, vbox);
+                var vbox1 = vboxes[0];
+                var vbox2 = vboxes[1];
 
                 if (!vbox1) {
 //                    console.log("vbox1 not defined; shouldn't happen!");
@@ -632,8 +672,8 @@ var MMCQ = (function() {
         iter(pq, fractByPopulations * maxcolors);
 
         // Re-sort by the product of pixel occupancy times the size in color space.
-        var pq2 = new PQueue(function(a,b) {
-            return pv.naturalOrder(a.count()*a.volume(), b.count()*b.volume());
+        var pq2 = new PQueue(function(a, b) {
+            return pv.naturalOrder(a.count() * a.volume(), b.count() * b.volume());
         });
         while (pq.size()) {
             pq2.push(pq.pop());
