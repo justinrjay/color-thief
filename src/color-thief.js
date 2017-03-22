@@ -17,7 +17,7 @@
  * @license
  */
 
-module.exports = function () {
+module.exports = (function () {
     var ColorThief = function () {};
 
     /*
@@ -685,4 +685,4 @@ module.exports = function () {
     };
 
     return ColorThief;
-};
+})();
