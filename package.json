@@ -24,12 +24,7 @@
   "bugs": {
     "url": "https://github.com/mariotacke/color-thief/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://raw.githubusercontent.com/mariotacke/color-thief/master/LICENSE/"
-    }
-  ],
+  "license": "MIT",
   "main": "dist/color-thief.min.js",
   "devDependencies": {
     "grunt": "^1.0.1",
