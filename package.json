@@ -1,5 +1,5 @@
 {
-  "name": "@mariotacke/color-thief",
+  "name": "@justinrjay/color-thief",
   "version": "3.0.1",
   "author": {
     "name": "Lokesh Dhakar",
@@ -19,10 +19,10 @@
   "homepage": "http://lokeshdhakar.com/projects/color-thief/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mariotacke/color-thief.git"
+    "url": "https://github.com/justinrjay/color-thief.git"
   },
   "bugs": {
-    "url": "https://github.com/mariotacke/color-thief/issues"
+    "url": "https://github.com/justinrjay/color-thief/issues"
   },
   "license": "MIT",
   "main": "dist/color-thief.min.js",
