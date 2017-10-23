@@ -655,6 +655,7 @@ module.exports = (function () {
         xhr = new XMLHttpRequest();
         xhr.open('GET', imageUrl, true);
         xhr.responseType = 'arraybuffer';
+        xhr.setRequestHeader('Access-Control-Allow-Origin', window.location.origin);
         xhr.onload = function(e) {
             if (this.status == 200) {
                 uInt8Array = new Uint8Array(this.response);
