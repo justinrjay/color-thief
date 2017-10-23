@@ -1,7 +1,11 @@
 {
-  "name": "@justinrjay/color-thief-xhr-fix",
-  "version": "3.0.1",
-  "author": "Lokesh Dhakar <lokesh.dhakar@gmail.com> (http://lokeshdhakar.com/)",
+  "name": "@justinrjay/color-thief",
+  "version": "3.1.0",
+  "author": {
+    "name": "Lokesh Dhakar",
+    "email": "lokesh.dhakar@gmail.com",
+    "url": "http://lokeshdhakar.com/"
+  },
   "description": "Get the dominant color or color palette from an image.",
   "keywords": [
     "color",
@@ -15,10 +19,10 @@
   "homepage": "http://lokeshdhakar.com/projects/color-thief/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/justinrjay/color-thief.git"
+    "url": "https://github.com/mariotacke/color-thief.git"
   },
   "bugs": {
-    "url": "https://github.com/justinrjay/color-thief/issues"
+    "url": "https://github.com/mariotacke/color-thief/issues"
   },
   "license": "MIT",
   "main": "dist/color-thief.min.js",
@@ -35,17 +39,6 @@
     "build": "grunt build"
   },
   "files": [
-    "dist/color-thief.min.js"
-  ],
-  "directories": {
-    "example": "examples"
-  },
-  "dependencies": {
-    "grunt": "^1.0.1",
-    "grunt-contrib-connect": "^1.0.2",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-uglify": "^2.3.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-jscs": "^3.0.1"
-  }
+    "dist/"
+  ]
 }
